@@ -27,26 +27,39 @@ SECURITY_HEADERS = [
     "X-Content-Type-Options",
 ]
 
-
 def build_url(host, path):
     """Returnează o adresă completă, de exemplu https://example.com/login."""
-    pass
-
+    adresa = host + path
+    return adresa
 
 def is_https(url):
     """Returnează True dacă adresa începe cu https://, altfel False."""
-    pass
+    print(url, True)
+    print(url, False)
+    return url
 
 
 def show_response(url):
-    """Trimite un GET la url și afișează statusul și Content-Type."""
-    pass
+    """Trimite un GET la url și afisează statusul și Content-Type."""
+    response = requests.get(url)
+    content_type = response.headers.get("content-type")
+    print(f"Status: {response.status_code}")
+    print(f"Content-Type: {response.headers.get('Content-Type')}")
+    return response
 
 
 def check_site(url):
     """Returnează un dicționar cu: status, content_type, length, server."""
-    pass
-
+    try:
+        response = requests.get(url, timeout=5)
+        return {
+            "status": response.status_code,
+            "content_type": response.headers.get("Content-Type"),
+            "length": len(response.content),
+            "server": response.headers.get("Server", "unknown")
+        }
+    except Exception as e:
+        return {"status": None, "Eroare": str(e)}
 
 def scan_sites():
     """Verifică toate site-urile din SITES, afișează-le pe cele care merg și un rezumat."""
@@ -61,3 +74,13 @@ def check_headers(url):
 def retry_check(url, attempts=3):
     """Încearcă de cel mult `attempts` ori; returnează un dicționar cu: status, attempts."""
     pass
+
+print("--------------")
+print(build_url("google.com", "/home"))
+print("--------------")
+is_https("google.com")
+print("--------------")
+print(show_response("https://cybercor.org"))
+print("--------------")
+print(check_site("https://cybercor.org"))
+print("--------------")
